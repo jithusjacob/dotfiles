@@ -1,17 +1,17 @@
 
 vim.api.nvim_set_keymap('n', '<Leader>e',':NvimTreeToggle<CR>',
 { noremap = true, silent = true })
-vim.g.nvim_tree_disable_default_keybindings = 1;
+--vim.g.nvim_tree_disable_default_keybindings = 1;
 vim.g.nvim_tree_show_icons = {
     git = 0,
     folders = '0',
     files = 0,
     folder_arrows =0
 };
-
+require'nvim-tree'.setup();
     local tree_cb = require'nvim-tree.config'.nvim_tree_callback
     -- default mappings
-    vim.g.nvim_tree_bindings = {
+    local list = {
       { key = {"<CR>", "o", "<2-LeftMouse>"}, cb = tree_cb("edit") },
       { key = {"<2-RightMouse>", "<C-]>"},    cb = tree_cb("cd") },
       { key = "<C-v>",                        cb = tree_cb("vsplit") },

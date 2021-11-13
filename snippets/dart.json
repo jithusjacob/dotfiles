@@ -199,7 +199,50 @@
 				"  }",
 				"}"
 			]
-		}
+		},
+		"Bloc": {
+			"prefix": "blocsn",
+			"description": "Insert a bloc",
+			"body": [
+      "class ${1:Subject}Bloc extends Bloc<$1Event, $1State> {",
+      "\t${1:Subject}Bloc() : super(${1:Subject}Initial());",
+      "",
+      "\t@override",
+      "\tStream<$1State> mapEventToState($1Event event) async* {",
+      "\t\t${3:// TODO: implement mapEventToState}",
+      "\t}",
+      "}"
+			]
+		},
+		"Bloc State": {
+    "prefix": "blocssn",
+    "description": "Subject + Verb (action) + State",
+    "body": [
+      "class ${1:Subject}${2:Verb}${3:State} extends $1State {",
+      "\tconst $1$2$3($5);",
+      "",
+      "\t$4",
+      "",
+      "\t@override",
+      "\tList<Object> get props => [$6];",
+      "}"
+    ]
+  },
+   "Bloc Event": {
+    "description": "Subject + Noun (optional) + Verb (event)",
+    "prefix": "blocesn",
+    "body": [
+      "class ${1:Subject}${2:Noun}${3:Verb} extends $1Event {",
+      "\tconst $1$2$3($5);",
+      "",
+      "\t$4",
+      "",
+      "\t@override",
+      "\tList<Object> get props => [$6];",
+      "}"
+    ]
+  }
 	}
+
 }
 

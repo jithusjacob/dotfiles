@@ -7,3 +7,5 @@ vim.api.nvim_set_keymap('n', '<Leader>b',
 
 vim.api.nvim_set_keymap('n', '<Leader>fg', 
 [[<Cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
+
+require('telescope').load_extension('coc')

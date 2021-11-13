@@ -5,10 +5,20 @@ vim.api.nvim_set_keymap('n', '<Leader>fc',
 { noremap = true, silent = true })
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true;
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    'documentation',
+    'detail',
+    'additionalTextEdits',
+  }
+}
 
 
 require("flutter-tools").setup{
 
+	widget_guides = {
+    enabled = true,
+  },
 lsp = {
     capabilities = capabilities,                                                                    }
 }
@@ -39,5 +49,19 @@ vim.api.nvim_set_keymap('n', '<Leader>ca',':Lspsaga code_action<CR>',
 { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fe',':Lspsaga diagnostic_jump_next<CR>',
 { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'gd','<cmd>lua vim.lsp.buf.definition()<CR>',
+{ noremap = true, silent = true })
+-- show hover doc
+vim.api.nvim_set_keymap('n', 'K',':Lspsaga hover_doc<CR>',
+{ noremap = true, silent = true })
+
+-- scroll down hover doc or scroll in definition preview
+--vim.api.nvim_set_keymap('n', '<C-f>',
+--'<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>',
+--{ noremap = true, silent = true })
+--vim.api.nvim_set_keymap('n', '<C-b>',
+--'<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>',
+--{ noremap = true, silent = true })
+
 -- autoformat on save
 vim.cmd 'au BufWritePre *.dart :DartFmt'

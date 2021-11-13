@@ -17,7 +17,6 @@ cmd 'filetype plugin indent on'
 --utils.opt('o', 'splitright', true)
 --utils.opt('o', 'wildmode', 'list:longest')
 --utils.opt('o', 'textwidth', 80)
-vim.o.textwidth = 80
 vim.o.scrolloff = 15 
 vim.wo.cursorline = true
 vim.wo.relativenumber = true
@@ -38,3 +37,5 @@ augroup AUTOSAVE
  autocmd InsertLeave,TextChanged,FocusLost * silent! write
 augroup END
 ]]
+--- brackets highlight plugin setting
+vim.g.rainbow_active = 1;
