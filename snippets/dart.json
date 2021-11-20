@@ -201,7 +201,7 @@
 			]
 		},
 		"Bloc": {
-			"prefix": "blocsn",
+			"prefix": "bloc",
 			"description": "Insert a bloc",
 			"body": [
       "class ${1:Subject}Bloc extends Bloc<$1Event, $1State> {",
@@ -215,11 +215,11 @@
 			]
 		},
 		"Bloc State": {
-    "prefix": "blocssn",
+    "prefix": "blocs",
     "description": "Subject + Verb (action) + State",
     "body": [
-      "class ${1:Subject}${2:Verb}${3:State} extends $1State {",
-      "\tconst $1$2$3($5);",
+      "class ${1:Subject}${3:State} extends $1State {",
+      "\tconst $1$3($5);",
       "",
       "\t$4",
       "",
@@ -230,10 +230,10 @@
   },
    "Bloc Event": {
     "description": "Subject + Noun (optional) + Verb (event)",
-    "prefix": "blocesn",
+    "prefix": "bloce",
     "body": [
-      "class ${1:Subject}${2:Noun}${3:Verb} extends $1Event {",
-      "\tconst $1$2$3($5);",
+      "class ${1:Subject}${3:Verb} extends $1Event {",
+      "\tconst $1$3($5);",
       "",
       "\t$4",
       "",
