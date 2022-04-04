@@ -13,4 +13,4 @@ nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
-let g:vsnip_snippet_dir = /Users/jsj/.config/nvim/snippets
+  let g:vsnip_snippet_dir = expand('~/.config/nvim/snippets')
