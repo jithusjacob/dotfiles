@@ -12,6 +12,7 @@ require "paq" {
   'hrsh7th/cmp-vsnip';
   'hrsh7th/vim-vsnip';
   'dart-lang/dart-vim-plugin'; -- dart syntax highlighting
+  'thosakwe/vim-flutter'; --use flutter commands
   --fuzzy finder
   'nvim-telescope/telescope.nvim';
   'nvim-lua/plenary.nvim';

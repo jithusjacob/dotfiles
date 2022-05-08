@@ -14,3 +14,9 @@ nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
   let g:vsnip_snippet_dir = expand('~/.config/nvim/snippets')
+  "save after exiting insert mode (InsertLeave event), after text change
+"(TextChanged event) or after Vim losing focus (FocusLost event)
+augroup AUTOSAVE
+ au!
+ autocmd InsertLeave,TextChanged,FocusLost * silent! update
+augroup END
