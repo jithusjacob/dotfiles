@@ -16,8 +16,13 @@ require "paq" {
   --fuzzy finder
   'nvim-telescope/telescope.nvim';
   'nvim-lua/plenary.nvim';
+  'nvim-lua/popup.nvim';
   -- file browser telescope extension
-   'nvim-telescope/telescope-file-browser.nvim'
+   'nvim-telescope/telescope-file-browser.nvim';
+  -- Web devicons for file icons
+   'kyazdani42/nvim-web-devicons';
+  -- File explorer
+   'kyazdani42/nvim-tree.lua';
 }
 
 

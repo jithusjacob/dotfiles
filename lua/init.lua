@@ -2,7 +2,7 @@
 vim.g.mapleader = ' '
 require('plugins') 
 require('colorscheme') 
---require('nvim_tree') 
+require('nvim_file_explorer') 
 require('telescope_plugin') 
 require('settings')
 require('lsp')
