@@ -77,3 +77,5 @@ require("telescope").load_extension "file_browser"
 vim.api.nvim_set_keymap("n","<space>ff",":Telescope find_files<CR>",{ noremap = true })
 vim.api.nvim_set_keymap("n","<space>fr",":Telescope live_grep<CR>",{ noremap = true })
 vim.api.nvim_set_keymap("n","<space>fb",":Telescope buffers<CR>",{ noremap = true })
+vim.api.nvim_set_keymap("n","<space>en",":Telescope find_files cwd=~/AppData/Local/nvim<CR>",{ noremap = true })
+
