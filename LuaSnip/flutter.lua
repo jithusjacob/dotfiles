@@ -15,8 +15,7 @@ local function copy(args)
   return args[1]
 end
 
-ls.add_snippets(nil, {
-  dart = {
+ls.add_snippets("dart", {
     snip({
       trig = "stless",
       namr = "StatelessWidget",
@@ -108,5 +107,4 @@ ls.add_snippets(nil, {
         t({ "}" })
       }
     ),
-  },
 })
