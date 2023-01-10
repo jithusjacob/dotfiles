@@ -1,6 +1,6 @@
 local ls = require("luasnip")
 -- some shorthands...
-local snip = ls.snippet
+local s = ls.snippet
 local text = ls.text_node
 local insert = ls.insert_node
 local func = ls.function_node
@@ -10,7 +10,8 @@ local isn = ls.indent_snippet_node
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
-
+local d = ls.dynamic_node
+local fmt = require("luasnip.extras.fmt").fmt
 -------------- All Pairs start
 local function char_count_same(c1, c2)
   local line = vim.api.nvim_get_current_line()
@@ -46,16 +47,16 @@ local function pair(pair_begin, pair_end, expand_func, ...)
     condition = part(expand_func, part(..., pair_begin, pair_end))
   })
 end
+
 -----------All Pairs end
+
 ls.add_snippets("all", {
-      pair("(", ")", neg, char_count_same),
-      pair("{", "}", neg, char_count_same),
-      pair("[", "]", neg, char_count_same),
-      pair("<", ">", neg, char_count_same),
-      pair("'", "'", neg, even_count),
-      pair('"', '"', neg, even_count),
-      pair("`", "`", neg, even_count),
-    })
-
-
-
+  pair("(", ")", neg, char_count_same),
+  pair("{", "}", neg, char_count_same),
+  pair("[", "]", neg, char_count_same),
+  pair("<", ">", neg, char_count_same),
+  pair("'", "'", neg, even_count),
+  pair('"', '"', neg, even_count),
+  pair("`", "`", neg, even_count),
+}
+)

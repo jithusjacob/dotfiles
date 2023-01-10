@@ -439,7 +439,9 @@ cmp.setup {
 }
 
 ---luasnip setup
-require("luasnip").config.set_config({
+local ls = require("luasnip")
+local types = require("luasnip.util.types")
+ls.config.set_config({
   history = true, --keep around last snippet local to jump back
   updateevents = "TextChanged,TextChangedI", --update changes as you type
   enable_autosnippets = true,
@@ -447,13 +449,29 @@ require("luasnip").config.set_config({
 require("luasnip.loaders.from_lua").load(
   { paths = "C:/Users/jithu/AppData/Local/nvim/LuaSnip" })
 
-local keymap = vim.api.nvim_set_keymap
-local opts = { noremap = true, silent = true }
-keymap("i", "<c-j>", "<cmd>lua require'luasnip'.jump(1)<CR>", opts)
-keymap("s", "<c-j>", "<cmd>lua require'luasnip'.jump(1)<CR>", opts)
-keymap("i", "<c-k>", "<cmd>lua require'luasnip'.jump(-1)<CR>", opts)
-keymap("s", "<c-k>", "<cmd>lua require'luasnip'.jump(-1)<CR>", opts)
+vim.keymap.set({"i","s"},"<c-j>",function ()
+  if ls.expand_or_jumpable then
+    ls.expand_or_jump()
+  end
+end,{silent = true})
 
+
+vim.keymap.set({"i","s"},"<c-k>",function ()
+  if ls.jumpable(-1) then
+    ls.jump(-1)
+  end
+end,{silent = true})
+
+vim.keymap.set({"i","s"},"<c-l>",function ()
+  if ls.choice_active() then
+    ls.change_choice(1)
+  end
+end,{silent = true})
+vim.api.nvim_set_keymap('i', "<C-t>", '<cmd>lua _G.dynamic_node_external_update(1)<Cr>', {noremap = true})
+vim.api.nvim_set_keymap('s', "<C-t>", '<cmd>lua _G.dynamic_node_external_update(1)<Cr>', {noremap = true})
+
+vim.api.nvim_set_keymap('i', "<C-g>", '<cmd>lua _G.dynamic_node_external_update(2)<Cr>', {noremap = true})
+vim.api.nvim_set_keymap('s', "<C-g>", '<cmd>lua _G.dynamic_node_external_update(2)<Cr>', {noremap = true})
 --Autocommands
 --local attach_to_buffer = function(output_bufnr, command)
   vim.api.nvim_create_autocmd("BufWritePost", {
