@@ -13,7 +13,6 @@ require('packer').startup(function(use)
   -- flutter run
   use 'thosakwe/vim-flutter'
   use 'dart-lang/dart-vim-plugin'
-  use 'C:/Users/jithu/Documents/nvim_plugins/flutter_nvim'
 
   use { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -21,12 +20,6 @@ require('packer').startup(function(use)
       -- Automatically install LSPs to stdpath for neovim
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
-
-      -- Useful status updates for LSP
-      'j-hui/fidget.nvim',
-
-      -- Additional lua configuration, makes nvim stuff amazing
-      'folke/neodev.nvim',
     },
   }
 
@@ -34,23 +27,6 @@ require('packer').startup(function(use)
     'hrsh7th/nvim-cmp',
     requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   }
-
-  use { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    run = function()
-      pcall(require('nvim-treesitter.install').update { with_sync = true })
-    end,
-  }
-
-  use { -- Additional text objects via treesitter
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    after = 'nvim-treesitter',
-  }
-
-  -- Git related plugins
-  use 'tpope/vim-fugitive'
-  use 'tpope/vim-rhubarb'
-  use 'lewis6991/gitsigns.nvim'
 
   use 'overcache/NeoSolarized' -- Theme
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
@@ -101,6 +77,8 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 
 -- Set highlight on search
 vim.o.hlsearch = false
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
 
 -- yank text to clipboard
 vim.o.clipboard = 'unnamedplus'
@@ -179,17 +157,6 @@ require('indent_blankline').setup {
   show_trailing_blankline_indent = false,
 }
 
--- Gitsigns
--- See `:help gitsigns.txt`
-require('gitsigns').setup {
-  signs = {
-    add = { text = '+' },
-    change = { text = '~' },
-    delete = { text = '_' },
-    topdelete = { text = '‾' },
-    changedelete = { text = '~' },
-  },
-}
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -223,69 +190,6 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
-require('nvim-treesitter.configs').setup {
-  -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'lua' },
-
-  highlight = { enable = true },
-  indent = { enable = true, disable = { 'python' } },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = '<c-space>',
-      node_incremental = '<c-space>',
-      scope_incremental = '<c-s>',
-      node_decremental = '<c-backspace>',
-    },
-  },
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ['aa'] = '@parameter.outer',
-        ['ia'] = '@parameter.inner',
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
-      },
-    },
-    move = {
-      enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        [']m'] = '@function.outer',
-        [']]'] = '@class.outer',
-      },
-      goto_next_end = {
-        [']M'] = '@function.outer',
-        [']['] = '@class.outer',
-      },
-      goto_previous_start = {
-        ['[m'] = '@function.outer',
-        ['[['] = '@class.outer',
-      },
-      goto_previous_end = {
-        ['[M'] = '@function.outer',
-        ['[]'] = '@class.outer',
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ['<leader>a'] = '@parameter.inner',
-      },
-      swap_previous = {
-        ['<leader>A'] = '@parameter.inner',
-      },
-    },
-  },
-}
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
@@ -346,36 +250,28 @@ end
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
-  -- clangd = {},
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
-
   sumneko_lua = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
+      diagnostics = { globals = {'vim'} },
     },
   },
 }
-
--- Setup neovim lua configuration
-require('neodev').setup()
---
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+-- Flutter Run command using flutter plugin
+vim.keymap.set('n', '<leader>af', ":FlutterRun -d chrome<cr>", { desc = '[A]ttach [F]lutterRun' })
 -- Setup flutter LSP
 require 'lspconfig'.dartls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
-vim.keymap.set('n', '<leader>af', ":FlutterRun -d chrome<cr>", { desc = '[A]ttach [F]lutterRun' })
 
 
--- Setup mason so it can manage external tooling
+--Setup mason so it can manage external tooling
 require('mason').setup()
 
 -- Ensure the servers above are installed
@@ -396,7 +292,7 @@ mason_lspconfig.setup_handlers {
 }
 
 -- Turn on lsp status information
-require('fidget').setup()
+-- require('fidget').setup()
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -433,7 +329,7 @@ cmp.setup {
       else
         fallback()
       end
-    end, { 'i', 's' }),
+   end, { 'i', 's' }),
   },
   sources = {
     { name = 'nvim_lsp' },
@@ -443,12 +339,12 @@ cmp.setup {
 
 ---luasnip setup
 local ls = require("luasnip")
-local types = require("luasnip.util.types")
 ls.config.set_config({
   history = true, --keep around last snippet local to jump back
   updateevents = "TextChanged,TextChangedI", --update changes as you type
   enable_autosnippets = true,
 }) --}}}
+
 require("luasnip.loaders.from_lua").load(
   { paths = "C:/Users/jithu/AppData/Local/nvim/LuaSnip" })
 
@@ -470,131 +366,13 @@ vim.keymap.set({"i","s"},"<c-l>",function ()
     ls.change_choice(1)
   end
 end,{silent = true})
-vim.api.nvim_set_keymap('i', "<C-t>", '<cmd>lua _G.dynamic_node_external_update(1)<Cr>', {noremap = true})
-vim.api.nvim_set_keymap('s', "<C-t>", '<cmd>lua _G.dynamic_node_external_update(1)<Cr>', {noremap = true})
-
-vim.api.nvim_set_keymap('i', "<C-g>", '<cmd>lua _G.dynamic_node_external_update(2)<Cr>', {noremap = true})
-vim.api.nvim_set_keymap('s', "<C-g>", '<cmd>lua _G.dynamic_node_external_update(2)<Cr>', {noremap = true})
 --Autocommands
---local attach_to_buffer = function(output_bufnr, command)
+--Flutter format on save
   vim.api.nvim_create_autocmd("BufWritePost", {
     group = vim.api.nvim_create_augroup("jsjautcommands", { clear = true }),
     pattern = "*.dart",
     callback = function()
       vim.lsp.buf.format()
-     -- local append_data = function(_, data)
-      --  if data then
-       --   vim.api.nvim_buf_set_lines(output_bufnr, -1, -1, false, data)
-     -- print("check ssst")
-     --   end
-     -- end
-
-    --  vim.api.nvim_buf_set_lines(output_bufnr, 0, -1, false, { "Flutter Run Output:" })
-    --  vim.fn.jobstart(command, {
-    --    stdout_buffered = true,
-     --   on_stdout = append_data,
-     --   on_stderr = append_data,
-     -- })
     end,
   })
---end
 
-vim.api.nvim_create_user_command("FlutterR", function()
-  print("checking flutter run")
-  --local bufnumber = vim.api.nvim_create_buf(true,false)
-  --print("buff no" + bufnumber)
-  --attach_to_buffer(bufnumber,"flutter run -d chrome" )
-end, {})
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
----------------dynamic node---
-local util = require("luasnip.util.util")
-local node_util = require("luasnip.nodes.util")
-
-local function find_dynamic_node(node)
-	-- the dynamicNode-key is set on snippets generated by a dynamicNode only (its'
-	-- actual use is to refer to the dynamicNode that generated the snippet).
-	while not node.dynamicNode do
-		node = node.parent
-	end
-	return node.dynamicNode
-end
-
-local external_update_id = 0
--- func_indx to update the dynamicNode with different functions.
-function dynamic_node_external_update(func_indx)
-	-- most of this function is about restoring the cursor to the correct
-	-- position+mode, the important part are the few lines from
-	-- `dynamic_node.snip:store()`.
-	print("this function is called with index " .. func_indx)
-
-
-	-- find current node and the innermost dynamicNode it is inside.
-	local current_node = ls.session.current_nodes[vim.api.nvim_get_current_buf()]
-	local dynamic_node = find_dynamic_node(current_node)
-
-	-- to identify current node in new snippet, if it is available.
-	external_update_id = external_update_id + 1
-	current_node.external_update_id = external_update_id
-
-	-- store which mode we're in to restore later.
-	local insert_pre_call = vim.fn.mode() == "i"
-	-- is byte-indexed! Doesn't matter here, but important to be aware of.
-	local cursor_pos_pre_relative = util.pos_sub(
-		util.get_cursor_0ind(),
-		current_node.mark:pos_begin_raw()
-	)
-
-	-- leave current generated snippet.
-	node_util.leave_nodes_between(dynamic_node.snip, current_node)
-
-	-- call update-function.
-	local func = dynamic_node.user_args[func_indx]
-	if func then
-
-		-- the same snippet passed to the dynamicNode-function. Any output from func
-		-- should be stored in it under some unused key.
-		func(dynamic_node.parent.snippet)
-	end
-
-	-- last_args is used to store the last args that were used to generate the
-	-- snippet. If this function is called, these will most probably not have
-	-- changed, so they are set to nil, which will force an update.
-	dynamic_node.last_args = nil
-	dynamic_node:update()
-
-	-- everything below here isn't strictly necessary, but it's pretty nice to have.
-
-
-	-- try to find the node we marked earlier.
-	local target_node = dynamic_node:find_node(function(test_node)
-		return test_node.external_update_id == external_update_id
-	end)
-
-	if target_node then
-		-- the node that the cursor was in when changeChoice was called exists
-		-- in the active choice! Enter it and all nodes between it and this choiceNode,
-		-- then set the cursor.
-		node_util.enter_nodes_between(dynamic_node, target_node)
-
-		if insert_pre_call then
-			util.set_cursor_0ind(
-				util.pos_add(
-					target_node.mark:pos_begin_raw(),
-					cursor_pos_pre_relative
-				)
-			)
-		else
-			node_util.select_node(target_node)
-		end
-		-- set the new current node correctly.
-		ls.session.current_nodes[vim.api.nvim_get_current_buf()] = target_node
-	else
-		-- the marked node wasn't found, just jump into the new snippet noremally.
-		ls.session.current_nodes[vim.api.nvim_get_current_buf()] = dynamic_node.snip:jump_into(1)
-	end
-end
-
-
-
---
