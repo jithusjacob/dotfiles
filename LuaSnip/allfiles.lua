@@ -1,17 +1,8 @@
 local ls = require("luasnip")
 -- some shorthands...
 local s = ls.snippet
-local text = ls.text_node
-local insert = ls.insert_node
-local func = ls.function_node
-local choice = ls.choice_node
-local dynamicn = ls.dynamic_node
-local isn = ls.indent_snippet_node
 local t = ls.text_node
 local i = ls.insert_node
-local f = ls.function_node
-local d = ls.dynamic_node
-local fmt = require("luasnip.extras.fmt").fmt
 -------------- All Pairs start
 local function char_count_same(c1, c2)
   local line = vim.api.nvim_get_current_line()
@@ -34,7 +25,7 @@ end
 
 local function part(fn, ...)
   local args = { ... }
-  return function() return fn(unpack(args)) end
+  return function() return fn(table.unpack(args)) end
 end
 
 -- This makes creation of pair-type snippets easier.
